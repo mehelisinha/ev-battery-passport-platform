@@ -1,0 +1,8 @@
+{
+  "name": "pl_battery_registry",
+  "properties": {
+    "description": "Reference-data load for EU battery registry / MaStR. PRD Section 5.1, Section 9. TODO: add Copy activity from registry export to Bronze.",
+    "activities": [],
+    "annotations": ["reference-data", "bronze"]
+  }
+}

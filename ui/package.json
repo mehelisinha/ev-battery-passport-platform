@@ -1,0 +1,10 @@
+{
+  "name": "ev-battery-grid-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "React 18 + TypeScript SPA. Placeholder — scaffold with Vite in Phase 5 (roadmap Step 5.2).",
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"Scaffold with Vite in Phase 5: npm create vite@latest . -- --template react-ts\" && exit 0"
+  }
+}

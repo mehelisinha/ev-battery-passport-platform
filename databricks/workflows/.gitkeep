@@ -1,0 +1,2 @@
+# Databricks Workflows job definitions (YAML) — roadmap Step 6.1.
+# DAG: SMARD ingest -> Silver -> Gold -> Neo4j sync, with retries + alerting.

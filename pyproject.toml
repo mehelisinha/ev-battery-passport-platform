@@ -1,0 +1,92 @@
+[project]
+name = "ev-battery-passport-platform"
+version = "0.1.0"
+description = "EV Battery Passport x German Energy Grid Intelligence Platform"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# Base dependencies — kept deliberately tiny. Heavy, phase-specific libraries
+# (pyspark, great-expectations, fastapi, ...) live in the optional groups below
+# and are installed only when you reach the phase that needs them. This keeps
+# the initial environment fast and the dependency surface honest.
+dependencies = [
+    "python-dotenv>=1.0",
+]
+
+# Install a group with, e.g.:  uv sync --extra ingest
+[project.optional-dependencies]
+# Phase 1 — batch ingestion (SMARD / ENTSO-E / OPSD)
+ingest = [
+    "requests>=2.31",
+    "pandas>=2.2",
+    "entsoe-py>=0.6",
+]
+# Phase 1-4 — PySpark / Delta (only if you run Spark locally; on Databricks it is preinstalled)
+spark = [
+    "pyspark>=3.5",
+    "delta-spark>=3.2",
+]
+# Phase 1 — data contracts
+quality = [
+    "great-expectations>=1.0",
+]
+# Phase 2 — streaming + cache
+streaming = [
+    "azure-eventhub>=5.11",
+    "redis>=5.0",
+]
+# Phase 3 — knowledge graph
+graph = [
+    "neo4j>=5.20",
+]
+# Phase 5 — API backend
+api = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "pydantic>=2.6",
+    "slowapi>=0.1.9",
+]
+
+# Dev tooling — installed automatically by `uv sync`.
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "pytest>=8.0",
+    "pre-commit>=3.7",
+]
+
+[tool.uv]
+# This is an application, not a publishable library — uv manages the environment
+# but does not try to build/install the project itself.
+package = false
+
+# ───────────────────────────────────────────────────────────────────────────
+# Ruff — linter + formatter (single tool, replaces black + isort + flake8)
+# ───────────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["databricks/src", "api", "graph", "streaming", "redis"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101"]  # asserts are expected in tests
+
+# ───────────────────────────────────────────────────────────────────────────
+# Pytest
+# ───────────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+pythonpath = ["databricks/src"]
+testpaths = ["databricks/tests"]
+addopts = "-ra"

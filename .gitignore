@@ -1,0 +1,83 @@
+# ───────────────────────────────────────────────────────────────────────────
+# Secrets & local config  (NEVER commit credentials — PRD §10 Security)
+# ───────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+.databrickscfg
+
+# ───────────────────────────────────────────────────────────────────────────
+# Source documents  (only README.md is tracked; PRD PDF stays local)
+# ───────────────────────────────────────────────────────────────────────────
+PRD1_EV_Battery_Energy_Grid.pdf
+*.pdf
+
+# ───────────────────────────────────────────────────────────────────────────
+# Python
+# ───────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.python-version-local
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# uv
+# (uv.lock IS committed — it is the reproducible lockfile)
+
+# ───────────────────────────────────────────────────────────────────────────
+# Data files  (never commit raw/processed data — it lands in the lakehouse)
+# ───────────────────────────────────────────────────────────────────────────
+data/
+*.csv
+*.parquet
+*.json.gz
+*.delta/
+spark-warehouse/
+metastore_db/
+derby.log
+checkpoints/
+
+# ───────────────────────────────────────────────────────────────────────────
+# Node / React UI
+# ───────────────────────────────────────────────────────────────────────────
+node_modules/
+ui/dist/
+ui/.vite/
+*.local
+
+# ───────────────────────────────────────────────────────────────────────────
+# Terraform
+# ───────────────────────────────────────────────────────────────────────────
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+override.tf
+override.tf.json
+
+# ───────────────────────────────────────────────────────────────────────────
+# IDE / OS
+# ───────────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

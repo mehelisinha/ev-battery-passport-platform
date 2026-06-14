@@ -1,0 +1,50 @@
+# Marquez + PostgreSQL — local OpenLineage backend (roadmap Step 4.1; PRD §6.5).
+# Runs entirely on your laptop (EUR 0). Start with:  docker compose up -d
+#
+# Then point Databricks/Spark OpenLineage at http://localhost:5000 via the
+# OPENLINEAGE_URL / OPENLINEAGE_NAMESPACE settings (.env).
+#
+# Pin to a known-good Marquez release; verify the tag when you reach Phase 4.
+services:
+  marquez-db:
+    image: postgres:14
+    container_name: marquez-db
+    environment:
+      POSTGRES_USER: marquez
+      POSTGRES_PASSWORD: marquez
+      POSTGRES_DB: marquez
+    volumes:
+      - marquez-db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  marquez:
+    image: marquezproject/marquez:0.49.0
+    container_name: marquez-api
+    depends_on:
+      - marquez-db
+    environment:
+      MARQUEZ_PORT: 5000
+      MARQUEZ_ADMIN_PORT: 5001
+      POSTGRES_HOST: marquez-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: marquez
+      POSTGRES_USER: marquez
+      POSTGRES_PASSWORD: marquez
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  marquez-web:
+    image: marquezproject/marquez-web:0.49.0
+    container_name: marquez-web
+    depends_on:
+      - marquez
+    environment:
+      MARQUEZ_HOST: marquez
+      MARQUEZ_PORT: 5000
+    ports:
+      - "3000:3000"
+
+volumes:
+  marquez-db-data:

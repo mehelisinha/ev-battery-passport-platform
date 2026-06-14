@@ -1,0 +1,8 @@
+{
+  "name": "pl_entsoe_ingest",
+  "properties": {
+    "description": "Daily batch pull of ENTSO-E cross-border flow data to Bronze. Roadmap Step 1.6; PRD Section 5.1. Token from Key Vault (ENTSOE_API_TOKEN). TODO: add Web activity + auth header.",
+    "activities": [],
+    "annotations": ["phase-1", "entsoe", "bronze"]
+  }
+}

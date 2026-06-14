@@ -1,0 +1,58 @@
+name: CI
+
+# Runs on every push to main and on every pull request.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref to save Actions minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-test:
+    name: Lint & test (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Pin Python
+        run: uv python install 3.11
+
+      - name: Install dependencies (base + dev group)
+        run: uv sync
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Run unit tests
+        run: uv run pytest
+
+  # Validates JSON/YAML config so a malformed ADF export or workflow file
+  # fails fast in CI instead of silently at deploy time.
+  validate-config:
+    name: Validate config files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON (ADF pipelines, etc.)
+        run: |
+          fail=0
+          while IFS= read -r -d '' f; do
+            python -c "import json,sys; json.load(open(sys.argv[1]))" "$f" \
+              && echo "ok   $f" || { echo "FAIL $f"; fail=1; }
+          done < <(find . -name '*.json' -not -path './node_modules/*' -print0)
+          exit $fail

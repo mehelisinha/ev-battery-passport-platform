@@ -1,0 +1,24 @@
+name: Deploy
+
+# Placeholder deploy pipeline (PRD Section 9 lists deploy.yml).
+#
+# Intentionally manual-only (workflow_dispatch) for now: there is nothing to
+# deploy until Phase 5/6. Wire the real steps in as you build them, e.g.:
+#   - Databricks Asset Bundle deploy (`databricks bundle deploy`)
+#   - UI build + push to Azure Static Web Apps
+#   - FastAPI build + push to Azure Container Apps / App Service
+#
+# Keeping it dispatch-only means it never runs (and never fails) on push
+# before the targets exist. See roadmap Step 6.3 / 6.4.
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    name: Deploy (not yet implemented)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notice
+        run: |
+          echo "Deploy pipeline is a placeholder."
+          echo "Implement during Phase 5 (UI/API) and Phase 6 (IaC) — roadmap Step 6.3/6.4."
